@@ -12,7 +12,7 @@ export type IUser = {
   password: string
   name: IName
   address?: string
-  image: string
+  imageUrl: string
 }
 
 // Create a new Model type that knows about IUserMethods when available here...

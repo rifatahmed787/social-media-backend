@@ -9,9 +9,6 @@ export const user_signup_zod_schema = z.object({
       firstName: z.string({ required_error: 'First name is required' }),
       lastName: z.string().optional(),
     }),
-    address: z.string({
-      required_error: 'Present address is required',
-    }),
   }),
 })
 

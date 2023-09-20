@@ -1,11 +1,11 @@
 import express from 'express'
 import requestValidationHandler from '../../middlewares/requestValidationHandler'
 
-import { BookController } from './media.controller'
+import { MediaController } from './media.controller'
 import {
-  create_book_zod_schema,
-  update_book_zod_schema,
-} from './book.validation'
+  create_media_zod_schema,
+  update_media_zod_schema,
+} from './media.validation'
 import authHandler from '../../middlewares/authHandler'
 
 const router = express.Router()
@@ -13,23 +13,23 @@ const router = express.Router()
 router.post(
   '/',
   authHandler(),
-  requestValidationHandler(create_book_zod_schema),
-  BookController.createBook
+  requestValidationHandler(create_media_zod_schema),
+  MediaController.createMedia
 )
 
-router.get('/', BookController.allBooks)
-router.get('/latest-ten', BookController.latestTenBooks)
-router.get('/best-seller', BookController.bestSeller)
-router.get('/unique-filter-items', BookController.uniqueFilteringData)
+router.get('/', MediaController.allmedias)
+router.get('/latest-three', MediaController.latestThreeMedia)
 
-router.get('/:id', BookController.bookDetails)
+// router.get('/unique-filter-items', MediaController.uniqueFilteringData)
+
+router.get('/:id', MediaController.mediaDetails)
 
 router.patch(
   '/:id',
   authHandler(),
-  requestValidationHandler(update_book_zod_schema),
-  BookController.updateBook
+  requestValidationHandler(update_media_zod_schema),
+  MediaController.updateMedia
 )
-router.delete('/:id', authHandler(), BookController.deleteBook)
+router.delete('/:id', authHandler(), MediaController.deleteMedia)
 
-export const BookRoute = router
+export const MediaRoute = router

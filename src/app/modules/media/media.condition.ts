@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { book_search_condition_keys } from './media.constant'
-import { IBookFilter } from './media.interface'
+import { media_search_condition_keys } from './media.constant'
+import { IMediaFilter } from './media.interface'
 
-export const filter_book_conditions = (
-  filers: IBookFilter
+export const filter_media_conditions = (
+  filers: IMediaFilter
 ): { [key: string]: Array<Record<string, any>> } | undefined => {
   const { searchTerm, ...filter_keys } = filers
 
@@ -11,7 +11,7 @@ export const filter_book_conditions = (
 
   if (searchTerm) {
     conditions.push({
-      $or: book_search_condition_keys.map(item => ({
+      $or: media_search_condition_keys.map(item => ({
         [item]: {
           $regex: searchTerm,
           $options: 'i',

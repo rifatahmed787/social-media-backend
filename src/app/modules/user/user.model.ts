@@ -15,7 +15,7 @@ const UserSchema = new Schema<IUser, UserModel>(
       lastName: { type: String, required: true },
     },
     address: { type: String, required: false },
-    image: { type: String, required: true },
+    imageUrl: { type: String, required: true },
   },
   {
     timestamps: true,
