@@ -5,7 +5,7 @@ import ApiError from '../../errors/ApiError'
 import httpStatus from 'http-status'
 import { Review } from './review.model'
 import { IUser } from '../user/user.interface'
-import { Book } from '../media/media.model'
+import { Media } from '../media/media.model'
 
 // Create new user
 const post_review = async (review_data: IReview): Promise<IReview | null> => {
@@ -19,10 +19,10 @@ const post_review = async (review_data: IReview): Promise<IReview | null> => {
   }
 
   // book checking checking
-  const isBookExist = await Book.findById(review_data.book_id)
+  const isBookExist = await Media.findById(review_data.media_id)
 
   if (!isBookExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Book not found')
+    throw new ApiError(httpStatus.NOT_FOUND, 'Media not found')
   }
 
   const created_review = await Review.create(review_data)
@@ -31,19 +31,21 @@ const post_review = async (review_data: IReview): Promise<IReview | null> => {
 }
 
 // get_reviews_by_id
-const get_reviews_by_id = async (bookID: string): Promise<IReview[] | null> => {
+const get_reviews_by_id = async (
+  mediaID: string
+): Promise<IReview[] | null> => {
   // book checking checking
-  const isBookExist = await Book.isBookAvailable(bookID)
+  const isBookExist = await Media.isMediaAvailable(mediaID)
 
   if (!isBookExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Book not found')
+    throw new ApiError(httpStatus.NOT_FOUND, 'Media not found')
   }
 
-  const book_reviews = await Review.find({ book_id: bookID })
+  const media_reviews = await Review.find({ media_id: mediaID })
     .populate('book_id')
     .populate('reviewed_by')
 
-  return book_reviews
+  return media_reviews
 }
 
 export const ReviewServices = {

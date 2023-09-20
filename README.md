@@ -1,18 +1,18 @@
 ### Introduction
 
-Welcome to the Book Catalog API documentation! This API serves as the backend system for the Book Catalog platform, where users can explore and discover various books across different genres and authors.
+Welcome to the Social-ink API documentation! This API serves as the backend system for the Social-ink platform, where users can explore and discover various post across different idea.
 
 ## Features
 
-- Browse a vast collection of books.
-- Search for books based on titles, authors, or genres.
-- View detailed information about a specific book.
-- Add new books to the catalog.
-- Update existing book information.
-- Delete books from the catalog.
+- Browse a vast collection of media.
+- Search for media based on titles, authors.
+- View detailed information about a specific media.
+- Add new media to the socialink.
+- Update existing about information.
+- Delete media from the socialink.
 
 ## Base URL
 
 ```
- https://book-gallery-backend.vercel.app/api/v1/
+ https://social-media-server-fawn.vercel.app/api/v1
 ```

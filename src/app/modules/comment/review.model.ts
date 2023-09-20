@@ -6,16 +6,16 @@ const ReviewSchema = new Schema<IReview, ReviewModel>({
   rating: { type: Number, required: true },
   review: { type: String, required: true },
   reviewed_by: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
-  book_id: { type: Schema.Types.ObjectId, required: true, ref: 'Book' },
+  media_id: { type: Schema.Types.ObjectId, required: true, ref: 'Media' },
 })
 
 //isPhone Number Exist
-ReviewSchema.statics.isBookReviewedByUser = async function (
-  book_id: string,
+ReviewSchema.statics.isMediaReviewedByUser = async function (
+  media_id: string,
   user_id: string
 ): Promise<boolean> {
   const isExist = await Review.findOne({
-    book_id: new Types.ObjectId(book_id),
+    book_id: new Types.ObjectId(media_id),
     reviewed_by: new Types.ObjectId(user_id),
   })
 
