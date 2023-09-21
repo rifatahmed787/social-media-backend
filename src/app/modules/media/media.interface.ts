@@ -16,7 +16,9 @@ export type IComment = {
 export type IMedia = {
   _id?: Types.ObjectId
   description: string
+  owner: string
   image: string
+  userImage: string
   added_by: Types.ObjectId | IUser
   like: ILike[]
   comments: IComment[]

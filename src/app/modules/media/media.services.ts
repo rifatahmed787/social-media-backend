@@ -1,15 +1,13 @@
-import { pagination_map } from '../../../helpers/pagination'
 import { GenericResponse } from '../../../interfaces/common'
-import { filter_media_conditions } from './media.condition'
+
 import ApiError from '../../errors/ApiError'
-import { ILike, IMedia, IMediaFilter } from './media.interface'
+import { ILike, IMedia } from './media.interface'
 import { Media } from './media.model'
 import { User } from '../user/user.model'
 import { IUser } from '../user/user.interface'
 import httpStatus from 'http-status'
 import { Types } from 'mongoose'
 import { JwtPayload } from 'jsonwebtoken'
-import { IPagination } from '../../../interfaces/pagination'
 
 // Create new media
 const create_new_media = async (
@@ -62,37 +60,42 @@ const toggle_like = async (
 }
 
 //  gel_all_books
-const gel_all_medias = async (
-  filers: IMediaFilter,
-  pagination_data: Partial<IPagination>
-): Promise<GenericResponse<IMedia[]> | null> => {
-  const { page, limit, skip, sortObject } = pagination_map(pagination_data)
-
-  // and conditions (for search and filter)
-  const IsConditions = filter_media_conditions(filers) ?? {}
-
-  //
-  const all_medias = await Media.find(IsConditions)
-    .sort(sortObject)
-    .skip(skip)
-    .limit(limit)
-
-  const total = await Media.countDocuments(IsConditions)
+const gel_all_medias = async (): Promise<GenericResponse<IMedia[]> | null> => {
+  const all_medias = await Media.find({})
 
   return {
-    meta: {
-      page: page,
-      limit: limit,
-      total: total,
-    },
     data: all_medias,
   }
 }
 
 //  latestTenBooks
 const latest_three_media = async (): Promise<IMedia[] | null> => {
-  //
-  const latest_medias = await Media.find({}).sort({ _id: -1 }).limit(3)
+  const latest_medias = await Media.aggregate([
+    {
+      $lookup: {
+        from: 'like',
+        localField: '_id',
+        foreignField: 'mediaId',
+        as: 'like',
+      },
+    },
+    {
+      $addFields: {
+        likeCount: { $size: '$like' },
+      },
+    },
+    {
+      $sort: { likeCount: -1 },
+    },
+    {
+      $limit: 3,
+    },
+    {
+      $project: {
+        likes: 0,
+      },
+    },
+  ])
 
   return latest_medias
 }

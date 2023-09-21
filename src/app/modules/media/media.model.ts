@@ -5,6 +5,8 @@ import { MediaModel, IMedia } from './media.interface'
 const MediaSchema = new Schema<IMedia & Document, MediaModel>({
   description: { type: String, required: true },
   image: { type: String, required: true },
+  userImage: { type: String, required: true },
+  owner: { type: String, required: true },
   added_by: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
   like: [{ userId: String, userName: String, userImage: String }],
   comments: [{ userId: String, userName: String, userImage: String }],

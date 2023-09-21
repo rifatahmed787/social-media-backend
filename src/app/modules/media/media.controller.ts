@@ -3,9 +3,6 @@ import httpStatus from 'http-status'
 import catchAsync from '../../../shared/catchAsync'
 import sendResponse from '../../../shared/sendResponse'
 import { MediaServices } from './media.services'
-import pick from '../../../shared/pick'
-import { media_filter_keys } from './media.constant'
-import { pagination_keys } from '../../../constant/common'
 
 // Create media
 const createMedia = catchAsync(async (req: Request, res: Response) => {
@@ -66,10 +63,7 @@ const toggleLike = catchAsync(async (req: Request, res: Response) => {
 
 //  Get all media
 const allmedias = catchAsync(async (req: Request, res: Response) => {
-  const filers = pick(req.query, media_filter_keys)
-  const pagination = pick(req.query, pagination_keys)
-
-  const result = await MediaServices.gel_all_medias(filers, pagination)
+  const result = await MediaServices.gel_all_medias()
 
   sendResponse(res, {
     status_code: httpStatus.OK,
