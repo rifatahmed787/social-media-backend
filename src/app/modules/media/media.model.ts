@@ -1,33 +1,33 @@
-import { Schema, Types, model } from 'mongoose'
+import { Schema, Types, model, Document } from 'mongoose'
 import { MediaModel, IMedia } from './media.interface'
 
-// And a schema that knows about IUserMethods
-
-const MediaSchema = new Schema<IMedia, MediaModel>({
+// Define the schema for the media document
+const MediaSchema = new Schema<IMedia & Document, MediaModel>({
   description: { type: String, required: true },
   image: { type: String, required: true },
-
   added_by: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+  like: [{ userId: String, userName: String, userImage: String }],
+  comments: [{ userId: String, userName: String, userImage: String }],
 })
 
-//validatemediaOwnership
+// Validate media ownership
 MediaSchema.statics.validateMediaOwnership = async function (
   media_id: Types.ObjectId,
   owner_id: Types.ObjectId
 ): Promise<Partial<IMedia> | null> {
   const media = await Media.findOne({
-    _id: new Types.ObjectId(media_id),
-    added_by: new Types.ObjectId(owner_id),
+    _id: media_id,
+    added_by: owner_id,
   }).lean()
 
   return media
 }
 
-//ismediaAvailable
+// Check if media is available
 MediaSchema.statics.isMediaAvailable = async function (
   id: Types.ObjectId
 ): Promise<Partial<IMedia> | null> {
   return await Media.findById(id).lean()
 }
 
-export const Media = model<IMedia, MediaModel>('Media', MediaSchema)
+export const Media = model<IMedia & Document, MediaModel>('Media', MediaSchema)

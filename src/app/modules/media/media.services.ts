@@ -2,7 +2,7 @@ import { pagination_map } from '../../../helpers/pagination'
 import { GenericResponse } from '../../../interfaces/common'
 import { filter_media_conditions } from './media.condition'
 import ApiError from '../../errors/ApiError'
-import { IMedia, IMediaFilter } from './media.interface'
+import { ILike, IMedia, IMediaFilter } from './media.interface'
 import { Media } from './media.model'
 import { User } from '../user/user.model'
 import { IUser } from '../user/user.interface'
@@ -28,6 +28,37 @@ const create_new_media = async (
   const created_media = await Media.create(media_data)
 
   return created_media
+}
+
+// Toggle like on media
+const toggle_like = async (
+  media_id: Types.ObjectId | string,
+  user_id: Types.ObjectId | string,
+  user_details: ILike
+): Promise<IMedia | null> => {
+  const media = await Media.findById(media_id)
+
+  if (!media) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Media not found')
+  }
+
+  // Check if the user has already liked this media
+  const existingLikeIndex = media.like.findIndex(
+    like => like.userId === user_id
+  )
+
+  if (existingLikeIndex === -1) {
+    // User has not liked the media, add the like
+    media.like.push(user_details)
+  } else {
+    // User has already liked the media, remove the like
+    media.like.splice(existingLikeIndex, 1)
+  }
+
+  // Save the updated media
+  await media.save()
+
+  return media
 }
 
 //  gel_all_books
@@ -152,6 +183,7 @@ const delete_media = async (
 
 export const MediaServices = {
   create_new_media,
+  toggle_like,
   update_media,
   gel_all_medias,
   get_media_details,

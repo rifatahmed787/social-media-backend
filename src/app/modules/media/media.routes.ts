@@ -30,6 +30,9 @@ router.patch(
   requestValidationHandler(update_media_zod_schema),
   MediaController.updateMedia
 )
+
+router.patch('/toggle-like/:id', authHandler(), MediaController.toggleLike)
+
 router.delete('/:id', authHandler(), MediaController.deleteMedia)
 
 export const MediaRoute = router

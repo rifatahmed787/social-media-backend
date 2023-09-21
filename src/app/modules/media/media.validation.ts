@@ -4,6 +4,20 @@ export const create_media_zod_schema = z.object({
   body: z.object({
     description: z.string({ required_error: 'String is required' }),
     image: z.string({ required_error: 'Cover image is required' }),
+    like: z.array(
+      z.object({
+        userId: z.string(),
+        userName: z.string(),
+        userImage: z.string(),
+      })
+    ),
+    comments: z.array(
+      z.object({
+        userId: z.string(),
+        userName: z.string(),
+        userImage: z.string(),
+      })
+    ),
   }),
 })
 

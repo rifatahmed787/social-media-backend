@@ -41,6 +41,29 @@ const updateMedia = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const toggleLike = catchAsync(async (req: Request, res: Response) => {
+  const { id: media_id } = req.params
+  const { _id: user_id } = req.logged_in_user
+  const user_details = {
+    userId: user_id,
+    userName: req.logged_in_user.username,
+    userImage: req.logged_in_user.profileImage,
+  }
+
+  const result = await MediaServices.toggle_like(
+    media_id,
+    user_id,
+    user_details
+  )
+
+  sendResponse(res, {
+    status_code: httpStatus.OK,
+    success: true,
+    data: result,
+    message: 'Like toggled successfully',
+  })
+})
+
 //  Get all media
 const allmedias = catchAsync(async (req: Request, res: Response) => {
   const filers = pick(req.query, media_filter_keys)
@@ -55,6 +78,7 @@ const allmedias = catchAsync(async (req: Request, res: Response) => {
     message: 'Medias retrieved successfully',
   })
 })
+
 //  Get all latestthreemedia
 const latestThreeMedia = catchAsync(async (req: Request, res: Response) => {
   const result = await MediaServices.latest_three_media()
@@ -110,6 +134,7 @@ const deleteMedia = catchAsync(async (req: Request, res: Response) => {
 export const MediaController = {
   createMedia,
   mediaDetails,
+  toggleLike,
   updateMedia,
   deleteMedia,
   allmedias,

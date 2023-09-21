@@ -1,11 +1,25 @@
 import { Model, Types } from 'mongoose'
 import { IUser } from '../user/user.interface'
 
+export type ILike = {
+  userId: string
+  userName: string
+  userImage: string
+}
+
+export type IComment = {
+  userId: string
+  userName: string
+  userImage: string
+}
+
 export type IMedia = {
+  _id?: Types.ObjectId
   description: string
   image: string
-
   added_by: Types.ObjectId | IUser
+  like: ILike[]
+  comments: IComment[]
 }
 
 export type MediaModel = {
